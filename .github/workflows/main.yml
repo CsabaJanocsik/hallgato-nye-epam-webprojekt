@@ -9,9 +9,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "student-management-system-nye"
-          heroku_email: "janocsikcsaba@gmail.com"
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build and publish with Maven
+        run: |
+          # Versioning setup
+          version_prefix=`mvn help:evaluate -Dexpression=project.version --quiet -DforceStdout --file pom.xml | awk -F. '{print $1"."$2}'`
+          version="$version_prefix.${{github.run_number}}"
+          echo "Setting artifact version to $version"
+          # Push version to env
+          echo "ARTIFACT_VERSION=$version" >> $GITHUB_ENV
+          # Overwrite local artifact version
+          mvn -B versions:set -DnewVersion="$version" --file pom.xml
+          mvn -B deploy --file pom.xml
+          cp "target/roleplay-${version}.jar" "target/roleplay.jar"
+          env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      -name: Deploy
+       uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: "student-management-system-nye"
+        heroku_email: "janocsikcsaba@gmail.com"
