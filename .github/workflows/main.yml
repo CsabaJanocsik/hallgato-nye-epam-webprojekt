@@ -1,4 +1,4 @@
-name: Deploy
+name: Push Container to Heroku
 
 on:
   push:
@@ -9,28 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-      - name: Build and publish with Maven
-        run: |
-          # Versioning setup
-          version_prefix=`mvn help:evaluate -Dexpression=project.version --quiet -DforceStdout --file pom.xml | awk -F. '{print $1"."$2}'`
-          version="$version_prefix.${{github.run_number}}-$GITHUB_SHA"
-          echo "Setting artifact version to $version"
-          # Push version to env
-          echo "ARTIFACT_VERSION=$version" >> $GITHUB_ENV
-          # Overwrite local artifact version
-          mvn -B versions:set -DnewVersion="$version" --file pom.xml
-          mvn -B deploy --file pom.xml
-          cp "target/student-management-system-${version}.jar" "target/student-management-system.jar"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v1
       - name: Login to Heroku Container registry
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
