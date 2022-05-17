@@ -10,7 +10,7 @@ on:
 env:
   DOCKER_REGISTRY: ghcr.io
   DOCKER_IMAGE_NAME: ${{ github.repository }}
-  HEROKU_APP_NAME: 'student-management-system-nye'
+  HEROKU_APP_NAME: 'epam-nye-progkor-roleplay'
 
 jobs:
   build:
@@ -39,7 +39,7 @@ jobs:
           # Overwrite local artifact version
           mvn -B versions:set -DnewVersion="$version" --file pom.xml
           mvn -B deploy --file pom.xml
-            cp "target/student-management-system-${version}.jar" "target/student-management-system.jar"
+          cp "target/student-management-system-${version}.jar" "target/student-management-system.jar"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Log in to the Container registry
