@@ -14,7 +14,7 @@
 	<name>student-management-system</name>
 	<description>Student Management System using Spring Boot and Thymeleaf</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -52,6 +52,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -110,9 +111,7 @@
 						</rule>
 					</rules>
 				</configuration>
-			</plugin>
-
-			<!--<plugin>
+			</plugin>			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>3.1.2</version>
@@ -156,7 +155,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/CsabaJanocsik	/hallgato-nye-epam-webprojekt</url>
+			<url>https://maven.pkg.github.com/CsabaJanocsik/hallgato-nye-epam-webprojekt</url>
 		</repository>
 	</distributionManagement>
 
